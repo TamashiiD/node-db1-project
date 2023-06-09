@@ -15,12 +15,14 @@ const getById = id => {
 }
 
 const create = async account => {
-  const [id] = await db('accoutns').inster(account)
+  const [id] = await db('accounts').insert(account)
   return getById(id)
-  // DO YOUR MAGIC
+  // DO YOUR MAGIC This doesnt work for some reason!!
 }
 
-const updateById = (id, account) => {
+const updateById = async (id, account) => {
+await db("accounts").where("id", id).update(account)
+return getById(id)
   // DO YOUR MAGIC
 }
 

@@ -19,26 +19,33 @@ router.get('/:id', MW.checkAccountId, async (req, res, next) => {
   // DO YOUR MAGIC
 })
 
-router.post('/',MW.checkAccountPayload, MW.checkAccountNameUnique, (req, res, next) => {
-  // DO YOUR MAGIC
-  Accounts.create(req.body)
-  .then(newbody => {
-    res.json(newbody)
-  })
-  .catch(err=> {
+router.post('/',MW.checkAccountPayload, 
+MW.checkAccountNameUnique, 
+async (req, res, next) => {
+  // DO YOUR MAGIC This isnt working
+ 
+  try{ 
+    const newstuff = await Accounts.create({
+      name: req.body.name.trim(),
+      budget: req.body.budget
+    })
+    res.status(201).json(newstuff)
+  }
+  catch(err){
     next(err)
-  })
+  }
 })
 
-router.put('/:id', MW.checkAccountId, MW.checkAccountPayload, MW.checkAccountNameUnique, (req, res, next) => {
+router.put('/:id', MW.checkAccountId, MW.checkAccountPayload, async (req, res, next) => {
   // DO YOUR MAGIC
-  Accounts.create(req.body)
-  .then(newpost=> {
-    res.status(201).json(newpost)
-  })
-  .catch(err=>{
-    next(err)
-  })
+  const updated = await Accounts.updateById(req.params.id, req.body)
+ res.json(updated)
+  try{
+res.json("update account")
+ }
+ catch(err){
+  next(err)
+ }
 });
 
 router.delete('/:id', MW.checkAccountId, async (req, res, next) => {
